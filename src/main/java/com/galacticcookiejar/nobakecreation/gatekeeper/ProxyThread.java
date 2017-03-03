@@ -1,5 +1,8 @@
 package com.galacticcookiejar.nobakecreation.gatekeeper;
 
+import com.galacticcookiejar.nobakecreation.minecraft.net.HandshakePacket;
+import com.galacticcookiejar.nobakecreation.minecraft.net.MinecraftInputStream;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,10 +1,10 @@
 package com.galacticcookiejar.nobakecreation.minecraft.net;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.DataOutputStream;
 import java.io.OutputStream;
 
-public class MinecraftOutputStream extends ObjectOutputStream {
+public class MinecraftOutputStream extends DataOutputStream {
 
   public MinecraftOutputStream(OutputStream out) throws IOException {
     super(out);

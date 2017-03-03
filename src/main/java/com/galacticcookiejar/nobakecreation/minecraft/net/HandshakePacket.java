@@ -14,7 +14,9 @@ public class HandshakePacket extends MinecraftPacket {
 
     this.protocolVersion = this.in.readVarInt();
     int serverStringLength = this.in.readVarInt();
-    this.serverAddress = this.in.readUTF();
+    byte[] serverStringByte = new byte[serverStringLength];
+    this.in.readFully(serverStringByte);
+    this.serverAddress = new String(serverStringByte);
     if( this.serverAddress.length() != serverStringLength ) {
       throw new IOException("Malformed string read, size does not match listed size");
     }
@@ -28,4 +30,7 @@ public class HandshakePacket extends MinecraftPacket {
       throw new IOException("Next state specified is unrecognized");
     }
   }
+
+  public String getServerAddress() { return this.serverAddress; }
+  public int getServerPort() { return this.serverPort; }
 }

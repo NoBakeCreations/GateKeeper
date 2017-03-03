@@ -41,7 +41,8 @@ public class MinecraftPacket {
     this.readOnly = readOnly;
     this.compressed = compressed;
 
-    this.lengthRaw = in.readVarInt();
+    this.lengthRaw = in.available();
+    //this.lengthRaw = in.readVarInt();
 
     if( ! this.compressed ) {
       this.dataRaw = new byte[this.lengthRaw];
@@ -73,16 +74,6 @@ public class MinecraftPacket {
 
     this.in = new MinecraftInputStream(new ByteArrayInputStream(this.data));
     this.packetId = this.in.readVarInt();
-  }
-
-  private MinecraftInputStream getDataFullInputStream() throws IOException {
-    return new MinecraftInputStream(new ByteArrayInputStream(this.data, 0, this.length));
-  }
-
-  public MinecraftInputStream getDataInputStream() throws IOException {
-    MinecraftInputStream temp_stream = this.getDataFullInputStream();
-    temp_stream.readVarInt();
-    return temp_stream;
   }
 
   public int getPacketId() { return this.packetId; }

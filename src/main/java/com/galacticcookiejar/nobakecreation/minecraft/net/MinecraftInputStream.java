@@ -3,9 +3,9 @@ package com.galacticcookiejar.nobakecreation.minecraft.net;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.DataInputStream;
 
-public class MinecraftInputStream extends ObjectInputStream {
+public class MinecraftInputStream extends DataInputStream {
   private int lastLengthRead;
 
   public MinecraftInputStream(InputStream in) throws IOException {
@@ -57,17 +57,18 @@ public class MinecraftInputStream extends ObjectInputStream {
   }
 
   public MinecraftPacket getMinecraftPacket(MinecraftPacket.State connectionState, MinecraftPacket.BoundTowards boundTo) throws IOException {
-    this.mark(8);
     int packet_length = this.readVarInt();
-    int packet_id = this.readVarInt();
-    this.reset();
+    byte[] packet = new byte[packet_length];
+    this.readFully(packet);
+    MinecraftInputStream packet_stream = new MinecraftInputStream(new ByteArrayInputStream(packet));
+    int packet_id = packet_stream.readVarInt();
 
     if( boundTo == MinecraftPacket.BoundTowards.SERVER ) {
       switch(connectionState) {
         case HANDSHAKING:
             switch(packet_id) {
               case 0:
-                  return new HandshakePacket(this);
+                  return new HandshakePacket(new MinecraftInputStream(new ByteArrayInputStream(packet)));
               default: break;
             }
             break;
